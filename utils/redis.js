@@ -10,7 +10,7 @@
 //   isAlive() {
 //     return this.client.connected;
 //   }
-  
+
 //   get(key) {
 //     const get = promisify(this.client.get).bind(this.client);
 //     return get(key);
@@ -20,7 +20,7 @@
 //     const set = promisify(this.client.setex).bind(this.client);
 //     return set(key, duration, value);
 //   }
-  
+
 //   del(key) {
 //     const del = promisify(this.client.del).bind(this.client);
 //     return del(key)
