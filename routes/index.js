@@ -4,18 +4,18 @@ import usersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
 import FileController from '../controllers/FilesController';
 
-const router = Router()
-router.get('/status', AppController.getStatus);
-router.get('/stats', AppController.getStats);
-router.post('/users', usersController.postNew);
-router.get('/connect', AuthController.getConnect);
-router.get('/disconnect', AuthController.getDisconnect);
-router.get('/user/me', usersController.getMe);
-router.post('/files', FileController.postUpload);
-router.get('/files/:id', FileController.getShow);
-router.get('/files', FileController.getIndex);
-router.put('/files/:id/publish', FileController.putPublish);
-router.put('/files/:id/publish', FileController.putUnpublish);
-router.get('/files/:id/data', FileController.getFile);
+const indexRoute = Router()
+indexRoute.get('/status', AppController.getStatus);
+indexRoute.get('/stats', AppController.getStats);
+indexRoute.post('/users', usersController.postNew);
+indexRoute.get('/connect', AuthController.getConnect);
+indexRoute.get('/disconnect', AuthController.getDisconnect);
+indexRoute.get('/user/me', usersController.getMe);
+indexRoute.post('/files', FileController.postUpload);
+indexRoute.get('/files/:id', FileController.getShow);
+indexRoute.get('/files', FileController.getIndex);
+indexRoute.put('/files/:id/publish', FileController.putPublish);
+indexRoute.put('/files/:id/publish', FileController.putUnpublish);
+indexRoute.get('/files/:id/data', FileController.getFile);
 
-export default router
+export default indexRoute;
