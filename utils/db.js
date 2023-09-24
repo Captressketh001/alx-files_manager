@@ -1,78 +1,42 @@
-// import { MongoClient } from "mongodb";
-
-// class DBClient {
-//   constructor() {
-//     const host = process.env.DB_HOST || 'localhost';
-//     const port = process.env.DB_PORT || 27017;
-//     this.dbName = process.env.DB_DATABASE || 'files_manager';
-//     this.client = new MongoClient(`mongodb://${host}:${port}/${this.dbName}`, {
-//       useNewUrlParser: true,
-//       useUnifiedTopology: true,
-//     });
-//     this.isConnected = false;
-
-//     this.client
-//         .connect()
-//         .then(() => {
-//             this.isConnected = true;
-//         })
-//         .catch((err) => console.log(err));
-//     }
-//     isAlive() {
-//       return this.client.isConnected();
-//     }
-//     async nbUsers() {
-//       return this.client.db(this.dbName).collection('users').countDocuments();
-//     }
-
-//     async nbFiles() {
-//       return this.client.db(this.dbName).collection('files').countDocuments();
-//     }
-
-//     collection(name) {
-//       return this.client.db(this.dbName).collection(name);
-//     }
-// }
-
-// const dbClient = new DBClient;
-// export default dbClient;
-import MongoClient from 'mongodb/lib/mongo_client';
+import {
+  MongoClient,
+} from 'mongodb';
+import {
+  env,
+} from 'process';
 
 class DBClient {
   constructor() {
-    const host = process.env.DB_HOST || 'localhost';
-    const port = process.env.DB_PORT || 27017;
-    this.dbName = process.env.DB_DATABASE || 'files_manager';
-    this.client = new MongoClient(`mongodb://${host}:${port}/${this.dbName}`, {
+    this.host = env.DB_HOST || 'localhost';
+    this.port = env.DB_PORT || 27017;
+    this.dbName = env.DB_DATABASE || 'files_manager';
+    MongoClient(`mongodb://${this.host}:${this.port}`, {
       useNewUrlParser: true,
       useUnifiedTopology: true,
+    }).connect().then((client) => {
+      this.client = client;
+      this.db = this.client.db(this.dbName);
+    }).catch((err) => {
+      console.error(err.message);
     });
-    this._connected = false;
-
-    this.client
-      .connect()
-      .then(() => {
-        this._connected = true;
-      })
-      .catch((err) => console.log(err));
   }
 
   isAlive() {
-    return this.client.isConnected();
+    if (this.db) return true;
+    return false;
   }
 
   async nbUsers() {
-    return this.client.db(this.dbName).collection('users').countDocuments();
+    const collection = this.db.collection('users');
+    return collection.countDocuments();
   }
 
   async nbFiles() {
-    return this.client.db(this.dbName).collection('files').countDocuments();
-  }
-
-  collection(name) {
-    return this.client.db(this.dbName).collection(name);
+    const collection = this.db.collection('files');
+    return collection.countDocuments();
   }
 }
 
 const dbClient = new DBClient();
+
 export default dbClient;

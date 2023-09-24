@@ -1,21 +1,35 @@
-import { Router } from 'express';
+import {
+  Router,
+} from 'express';
 import AppController from '../controllers/AppController';
-import usersController from '../controllers/UsersController';
+import UsersController from '../controllers/UsersController';
 import AuthController from '../controllers/AuthController';
-import FileController from '../controllers/FilesController';
+import FilesController from '../controllers/FilesController';
 
-const indexRoute = Router()
-indexRoute.get('/status', AppController.getStatus);
-indexRoute.get('/stats', AppController.getStats);
-indexRoute.post('/users', usersController.postNew);
-indexRoute.get('/connect', AuthController.getConnect);
-indexRoute.get('/disconnect', AuthController.getDisconnect);
-indexRoute.get('/user/me', usersController.getMe);
-indexRoute.post('/files', FileController.postUpload);
-indexRoute.get('/files/:id', FileController.getShow);
-indexRoute.get('/files', FileController.getIndex);
-indexRoute.put('/files/:id/publish', FileController.putPublish);
-indexRoute.put('/files/:id/publish', FileController.putUnpublish);
-indexRoute.get('/files/:id/data', FileController.getFile);
+const router = Router();
 
-export default indexRoute;
+// check status and stats of db
+router.get('/status', AppController.getStatus);
+router.get('/stats', AppController.getStats);
+
+// connect and disconnect user
+router.get('/connect', AuthController.getConnect);
+router.get('/disconnect', AuthController.getDisconnect);
+
+// upload files
+router.post('/files', FilesController.postUpload);
+router.get('/files/:id', FilesController.getShow);
+router.get('/files', FilesController.getIndex);
+
+// publish and unpublish
+router.put('/files/:id/publish', FilesController.putPublish);
+router.put('/files/:id/unpublish', FilesController.putUnpublish);
+
+// user
+router.post('/users', UsersController.postNew);
+router.get('/users/me', UsersController.getMe);
+
+// file content
+router.get('/files/:id/data', FilesController.getFile);
+
+export default router;
